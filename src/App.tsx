@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import { useGameState } from './hooks/useGameState';
+import { useAutoGold } from './hooks/useAutoGold';
+import { Header } from './components/Header';
+import { ClickButton } from './components/ClickButton';
+import { EntityList } from './components/EntityList';
+import { LogPanel } from './components/LogPanel';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { 
+    gameState, 
+    clickGold, 
+    buyEntity, 
+    upgradeClickPower, 
+    addAutoGold,
+    addLog 
+  } = useGameState();
+
+  useAutoGold(gameState.player.goldPerSecond, addAutoGold);
+
+  React.useEffect(() => {
+    if (gameState.logs.length === 0) {
+      addLog('インクリメンタルファンタジーへようこそ！', 'info');
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <Header player={gameState.player} />
+      
+      <main className="main-content">
+        <div className="game-area">
+          <ClickButton 
+            clickPower={gameState.player.clickPower}
+            onClick={clickGold}
+          />
+        </div>
+        
+        <div className="side-panel">
+          <EntityList 
+            entities={gameState.entities}
+            player={gameState.player}
+            onBuyEntity={buyEntity}
+            onUpgradeClickPower={upgradeClickPower}
+          />
+        </div>
+      </main>
+      
+      <footer className="footer">
+        <LogPanel logs={gameState.logs} />
+      </footer>
+    </div>
+  );
 }
 
 export default App

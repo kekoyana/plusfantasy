@@ -156,6 +156,99 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+/* Reset Button */
+.reset-button {
+  background: rgba(239, 68, 68, 0.8);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  border-radius: 6px;
+  color: white;
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 1rem;
+}
+
+.reset-button:hover {
+  background: rgba(239, 68, 68, 1);
+  transform: translateY(-1px);
+}
+
+/* Reset Confirm Dialog */
+.reset-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.reset-confirm-dialog {
+  background: linear-gradient(145deg, rgba(35, 35, 56, 0.95) 0%, rgba(28, 28, 45, 0.9) 100%);
+  border: 2px solid rgba(218, 165, 32, 0.4);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  color: #e5ddd5;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.reset-confirm-dialog h3 {
+  margin: 0 0 1rem 0;
+  color: #ffd700;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.3rem;
+}
+
+.reset-confirm-dialog p {
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+  color: #daa520;
+}
+
+.reset-confirm-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.confirm-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.confirm-button.danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.confirm-button.danger:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.confirm-button.cancel {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+}
+
+.confirm-button.cancel:hover {
+  background: linear-gradient(135deg, #4b5563, #374151);
+  transform: translateY(-1px);
+}
+
 /* Main Content */
 .main-content {
   display: flex;
@@ -164,16 +257,7 @@ body {
   padding: 1rem;
 }
 
-.game-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-height: 400px;
-}
-
 .click-section {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,10 +265,30 @@ body {
 }
 
 .companion-section {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* デスクトップレイアウト */
+@media (min-width: 769px) {
+  .main-content {
+    flex-wrap: wrap;
+  }
+  
+  .click-section {
+    flex: 1 1 60%;
+    min-height: 250px;
+  }
+  
+  .companion-section {
+    flex: 1 1 60%;
+  }
+  
+  .side-panel {
+    flex: 0 0 400px;
+    order: 3;
+  }
 }
 
 .side-panel {
@@ -273,10 +377,10 @@ body {
 }
 
 .click-button-label {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -564,16 +668,25 @@ body {
 @media (max-width: 768px) {
   .main-content {
     flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .click-section {
+    order: 1;
+    min-height: 200px;
+    flex: none;
   }
 
   .side-panel {
+    order: 2;
     flex: none;
-    order: -1;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
 
-  .game-area {
-    min-height: 300px;
+  .companion-section {
+    order: 3;
+    margin-top: 1rem;
+    flex: none;
   }
 
   .click-button {
@@ -584,6 +697,11 @@ body {
 
   .click-button-text {
     font-size: 3rem;
+  }
+
+  .click-button-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
   }
 
   .header-content {
@@ -618,6 +736,12 @@ body {
     font-size: 0.8rem;
   }
 
+  .reset-button {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+    margin-left: 0.5rem;
+  }
+
   .entity-item {
     padding: 0.75rem;
   }
@@ -643,6 +767,11 @@ body {
 
   .click-button-text {
     font-size: 2.5rem;
+  }
+
+  .click-button-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3px;
   }
 
   .entity-item {

@@ -4,9 +4,24 @@ import { formatNumber, formatGoldPerSecond, formatTime } from '../utils/formatti
 
 interface HeaderProps {
   player: PlayerState;
+  onResetGame: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ player }) => {
+export const Header: React.FC<HeaderProps> = ({ player, onResetGame }) => {
+  const [showConfirm, setShowConfirm] = React.useState(false);
+
+  const handleResetClick = () => {
+    setShowConfirm(true);
+  };
+
+  const handleConfirmReset = () => {
+    onResetGame();
+    setShowConfirm(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowConfirm(false);
+  };
   return (
     <header className="game-header">
       <div className="header-content">
@@ -35,7 +50,38 @@ export const Header: React.FC<HeaderProps> = ({ player }) => {
             <span className="stat-label">総獲得:</span>
             <span className="stat-value">{formatNumber(player.totalGoldEarned)}</span>
           </div>
+          
+          <button 
+            className="reset-button"
+            onClick={handleResetClick}
+            title="ゲームをリセット"
+          >
+            🔄
+          </button>
         </div>
+        
+        {showConfirm && (
+          <div className="reset-confirm-overlay">
+            <div className="reset-confirm-dialog">
+              <h3>ゲームリセット確認</h3>
+              <p>本当にゲームを最初からやり直しますか？<br />すべての進行状況が失われます。</p>
+              <div className="reset-confirm-buttons">
+                <button 
+                  className="confirm-button danger"
+                  onClick={handleConfirmReset}
+                >
+                  リセットする
+                </button>
+                <button 
+                  className="confirm-button cancel"
+                  onClick={handleCancelReset}
+                >
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

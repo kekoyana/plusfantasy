@@ -148,6 +148,11 @@ export function useGameState() {
     }));
   }, [setGameState]);
 
+  const resetGame = useCallback(() => {
+    setGameState(initialGameState);
+    addLog('ゲームをリセットしました。新しい冒険を始めましょう！', 'info');
+  }, [setGameState, addLog]);
+
   useEffect(() => {
     let lastUpdate = Date.now();
     
@@ -175,6 +180,7 @@ export function useGameState() {
     buyEntity,
     upgradeClickPower,
     addAutoGold,
-    addLog
+    addLog,
+    resetGame
   };
 }

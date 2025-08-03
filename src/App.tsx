@@ -16,7 +16,8 @@ function App() {
     buyEntity, 
     upgradeClickPower, 
     addAutoGold,
-    addLog 
+    addLog,
+    resetGame
   } = useGameState();
 
   const [upgradeEffect, setUpgradeEffect] = useState<{entityId: string; entityName: string} | null>(null);
@@ -45,20 +46,18 @@ function App() {
 
   return (
     <div className="app">
-      <Header player={gameState.player} />
+      <Header player={gameState.player} onResetGame={resetGame} />
       
       <main className="main-content">
-        <div className="game-area">
-          <div className="click-section">
-            <ClickButton 
-              clickPower={gameState.player.clickPower}
-              onClick={clickGold}
-            />
-          </div>
-          
-          <div className="companion-section">
-            <CompanionDisplay entities={gameState.entities} />
-          </div>
+        <div className="click-section">
+          <ClickButton 
+            clickPower={gameState.player.clickPower}
+            onClick={clickGold}
+          />
+        </div>
+        
+        <div className="companion-section">
+          <CompanionDisplay entities={gameState.entities} />
         </div>
         
         <div className="side-panel">

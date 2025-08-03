@@ -255,6 +255,14 @@ body {
   flex: 1;
   gap: 1rem;
   padding: 1rem;
+  background: 
+    linear-gradient(135deg, rgba(15, 12, 41, 0.7) 0%, rgba(36, 36, 62, 0.8) 50%, rgba(48, 43, 99, 0.7) 100%),
+    url('/bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+  position: relative;
 }
 
 .click-section {

@@ -9,7 +9,7 @@ export const LogPanel: React.FC<LogPanelProps> = ({ logs }) => {
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [logs]);
 
   const formatTime = (timestamp: number) => {

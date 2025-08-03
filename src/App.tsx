@@ -20,6 +20,7 @@ function App() {
   } = useGameState();
 
   const [upgradeEffect, setUpgradeEffect] = useState<{entityId: string; entityName: string} | null>(null);
+  const [showLogs, setShowLogs] = useState<boolean>(false);
 
   useAutoGold(gameState.player.goldPerSecond, addAutoGold);
 
@@ -71,7 +72,15 @@ function App() {
       </main>
       
       <footer className="footer">
-        <LogPanel logs={gameState.logs} />
+        <div className="log-toggle">
+          <button 
+            className="toggle-logs-button"
+            onClick={() => setShowLogs(!showLogs)}
+          >
+            {showLogs ? 'ログを隠す' : 'ログを表示'}
+          </button>
+        </div>
+        {showLogs && <LogPanel logs={gameState.logs} />}
       </footer>
 
       <UpgradeEffect 

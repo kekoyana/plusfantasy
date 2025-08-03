@@ -47,7 +47,10 @@ export const EntityList: React.FC<EntityListProps> = ({
         
         <button 
           className="buy-button"
-          onClick={() => onBuyEntity(entity.id)}
+          onClick={(e) => {
+            onBuyEntity(entity.id);
+            e.currentTarget.blur();
+          }}
           disabled={!affordable}
         >
           <span className="buy-cost">{formatNumber(cost)}</span>
@@ -118,7 +121,10 @@ export const EntityList: React.FC<EntityListProps> = ({
               
               <button 
                 className="buy-button"
-                onClick={onUpgradeClickPower}
+                onClick={(e) => {
+                  onUpgradeClickPower();
+                  e.currentTarget.blur();
+                }}
                 disabled={!canAfford(player.gold, clickPowerUpgradeCost)}
               >
                 <span className="buy-cost">{formatNumber(clickPowerUpgradeCost)}</span>

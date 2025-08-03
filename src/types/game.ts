@@ -4,6 +4,22 @@ export interface PlayerState {
   goldPerSecond: number;
   totalGoldEarned: number;
   playtime: number;
+  gameStartTime: number;
+}
+
+export interface TutorialState {
+  isActive: boolean;
+  currentStep: number;
+  completedSteps: string[];
+  hasCompletedTutorial: boolean;
+}
+
+export interface GameProgress {
+  isGameCleared: boolean;
+  clearTime: number | null;
+  totalEntitiesOwned: number;
+  highestTotalGold: number;
+  hasShownClearScreen: boolean;
 }
 
 export interface UnlockCondition {
@@ -28,6 +44,8 @@ export interface GameState {
   player: PlayerState;
   entities: GameEntity[];
   logs: GameLog[];
+  tutorial: TutorialState;
+  progress: GameProgress;
 }
 
 export interface GameLog {

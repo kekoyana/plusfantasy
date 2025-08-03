@@ -7,6 +7,8 @@ import { EntityList } from './components/EntityList';
 import { LogPanel } from './components/LogPanel';
 import { CompanionDisplay } from './components/CompanionDisplay';
 import { UpgradeEffect } from './components/UpgradeEffect';
+import { Tutorial } from './components/Tutorial';
+import { GameClear } from './components/GameClear';
 import './App.css'
 
 function App() {
@@ -17,7 +19,11 @@ function App() {
     upgradeClickPower, 
     addAutoGold,
     addLog,
-    resetGame
+    resetGame,
+    nextTutorialStep,
+    skipTutorial,
+    completeTutorial,
+    continueAfterClear
   } = useGameState();
 
   const [upgradeEffect, setUpgradeEffect] = useState<{entityId: string; entityName: string} | null>(null);
@@ -26,7 +32,7 @@ function App() {
   useAutoGold(gameState.player.goldPerSecond, addAutoGold);
 
   React.useEffect(() => {
-    if (gameState.logs.length === 0) {
+    if (gameState.logs.length === 0 && !gameState.tutorial.hasCompletedTutorial) {
       addLog('インクリメンタルファンタジーへようこそ！', 'info');
     }
   }, []);
@@ -86,6 +92,20 @@ function App() {
         entityId={upgradeEffect?.entityId || null}
         entityName={upgradeEffect?.entityName || ''}
         onComplete={() => setUpgradeEffect(null)}
+      />
+
+      <Tutorial
+        tutorialState={gameState.tutorial}
+        onNextStep={nextTutorialStep}
+        onSkipTutorial={skipTutorial}
+        onComplete={completeTutorial}
+      />
+
+      <GameClear
+        progress={gameState.progress}
+        player={gameState.player}
+        onContinue={continueAfterClear}
+        onResetGame={resetGame}
       />
     </div>
   );

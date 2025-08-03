@@ -253,21 +253,32 @@ body {
 /* デスクトップレイアウト */
 @media (min-width: 769px) {
   .main-content {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    grid-template-areas: 
+      "click-area side-panel"
+      "companion-area side-panel";
   }
   
   .click-section {
-    flex: 1 1 60%;
+    grid-area: click-area;
     min-height: 250px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem;
   }
   
   .companion-section {
-    flex: 1 1 60%;
+    grid-area: companion-area;
+    align-items: flex-start;
+    justify-content: center;
   }
   
   .side-panel {
-    flex: 0 0 400px;
-    order: 3;
+    grid-area: side-panel;
+    flex: none;
   }
 }
 
@@ -1303,5 +1314,560 @@ body {
   .overflow-indicator {
     font-size: 0.65rem;
     padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Tutorial Styles */
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 51, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.tutorial-dialog {
+  background: #000000;
+  border: 4px solid #ffffff;
+  max-width: 600px;
+  width: 90%;
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    4px 4px 0 #000000;
+  position: relative;
+}
+
+.tutorial-header {
+  background: #333333;
+  padding: 1rem;
+  border-bottom: 2px solid #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.tutorial-header h3 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: #ffff00;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.tutorial-skip {
+  background: #cc0000;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    inset 1px 1px 0 #ff3333,
+    inset -1px -1px 0 #990000;
+}
+
+.tutorial-skip:hover {
+  background: #ff0000;
+  box-shadow: 
+    inset 1px 1px 0 #ff6666,
+    inset -1px -1px 0 #cc0000;
+}
+
+.tutorial-content {
+  padding: 1.5rem;
+}
+
+.tutorial-content h4 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1rem;
+  color: #66ccff;
+  text-shadow: 1px 1px 0 #000000;
+  line-height: 1.4;
+}
+
+.tutorial-content p {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.tutorial-action {
+  background: #333333;
+  border: 2px solid #ffff00;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #ffff00;
+  margin-top: 1rem;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.tutorial-buttons {
+  padding: 1rem 1.5rem;
+  border-top: 2px solid #ffffff;
+  background: #333333;
+  display: flex;
+  justify-content: center;
+}
+
+.tutorial-button {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #ffffff;
+  min-width: 120px;
+}
+
+.tutorial-button.next {
+  background: #0066cc;
+  box-shadow: 
+    inset 1px 1px 0 #3399ff,
+    inset -1px -1px 0 #003399;
+}
+
+.tutorial-button.next:hover {
+  background: #3399ff;
+  box-shadow: 
+    inset 1px 1px 0 #66ccff,
+    inset -1px -1px 0 #0066cc;
+}
+
+.tutorial-button.complete {
+  background: #00cc00;
+  box-shadow: 
+    inset 1px 1px 0 #33ff33,
+    inset -1px -1px 0 #009900;
+}
+
+.tutorial-button.complete:hover {
+  background: #00ff00;
+  box-shadow: 
+    inset 1px 1px 0 #66ff66,
+    inset -1px -1px 0 #00cc00;
+}
+
+.tutorial-progress {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #222222;
+  border-top: 1px solid #666666;
+}
+
+.progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #666666;
+  border: 1px solid #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.progress-dot.completed {
+  background: #00cc00;
+  box-shadow: 0 0 4px #00cc00;
+}
+
+/* Game Clear Styles */
+.game-clear-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 51, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(6px);
+}
+
+.game-clear-dialog {
+  background: #000000;
+  border: 4px solid #ffffff;
+  max-width: 700px;
+  width: 95%;
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    6px 6px 0 #000000;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.game-clear-header {
+  background: linear-gradient(135deg, #ffff00 0%, #ffd700 50%, #ffff00 100%);
+  color: #000000;
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 4px solid #ffffff;
+  position: relative;
+}
+
+.game-clear-header h2 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 0 #ffffff;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 2px 2px 0 #ffffff, 0 0 10px #ffff00;
+  }
+  to {
+    text-shadow: 2px 2px 0 #ffffff, 0 0 20px #ffd700, 0 0 30px #ffff00;
+  }
+}
+
+.clear-crown {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.game-clear-content {
+  padding: 2rem;
+}
+
+.clear-message {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.clear-message h3 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: #00ff00;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.clear-message p {
+  margin: 0;
+  line-height: 1.6;
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.clear-stats {
+  margin-bottom: 2rem;
+}
+
+.clear-stats h4 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: #66ccff;
+  text-shadow: 1px 1px 0 #000000;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.stat-box {
+  background: #333333;
+  border: 2px solid #ffffff;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: #cccccc;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-family: 'Press Start 2P', monospace;
+  color: #ffff00;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.clear-ranking {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.clear-ranking h4 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: #ff9900;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.ranking-result {
+  background: #333333;
+  border: 2px solid #ffffff;
+  padding: 1rem;
+  display: inline-block;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.rank-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
+}
+
+.rank-emoji {
+  font-size: 2rem;
+}
+
+.rank-grade {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: #ffff00;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.rank-message {
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.game-clear-buttons {
+  padding: 1.5rem;
+  border-top: 2px solid #ffffff;
+  background: #333333;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.clear-button {
+  padding: 1rem 1.5rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #ffffff;
+  min-width: 150px;
+  text-align: center;
+}
+
+.clear-button.continue {
+  background: #0066cc;
+  box-shadow: 
+    inset 1px 1px 0 #3399ff,
+    inset -1px -1px 0 #003399;
+}
+
+.clear-button.continue:hover {
+  background: #3399ff;
+  box-shadow: 
+    inset 1px 1px 0 #66ccff,
+    inset -1px -1px 0 #0066cc;
+}
+
+.clear-button.restart {
+  background: #cc6600;
+  box-shadow: 
+    inset 1px 1px 0 #ff9933,
+    inset -1px -1px 0 #993300;
+}
+
+.clear-button.restart:hover {
+  background: #ff9900;
+  box-shadow: 
+    inset 1px 1px 0 #ffcc66,
+    inset -1px -1px 0 #cc6600;
+}
+
+.clear-footer {
+  background: #222222;
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid #666666;
+}
+
+.clear-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #ffd700;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+/* Mobile adjustments for tutorial and game clear */
+@media (max-width: 768px) {
+  .tutorial-dialog {
+    width: 95%;
+    max-width: none;
+  }
+
+  .tutorial-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .tutorial-content {
+    padding: 1rem;
+  }
+
+  .tutorial-content h4 {
+    font-size: 1rem;
+  }
+
+  .tutorial-content p {
+    font-size: 0.75rem;
+  }
+
+  .tutorial-action {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .tutorial-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.7rem;
+    min-width: 100px;
+  }
+
+  .game-clear-dialog {
+    width: 98%;
+    max-height: 95vh;
+  }
+
+  .game-clear-header {
+    padding: 1rem;
+  }
+
+  .game-clear-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .game-clear-content {
+    padding: 1rem;
+  }
+
+  .clear-message h3 {
+    font-size: 1rem;
+  }
+
+  .clear-message p {
+    font-size: 0.75rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-box {
+    padding: 0.75rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .clear-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.7rem;
+    min-width: 120px;
+  }
+
+  .game-clear-buttons {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .clear-footer p {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tutorial-header h3 {
+    font-size: 0.8rem;
+  }
+
+  .tutorial-skip {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .tutorial-content h4 {
+    font-size: 0.9rem;
+  }
+
+  .tutorial-content p {
+    font-size: 0.7rem;
+  }
+
+  .tutorial-button {
+    font-size: 0.65rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clear-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .game-clear-buttons {
+    flex-direction: column;
   }
 }

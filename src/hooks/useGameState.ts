@@ -59,7 +59,7 @@ export function useGameState() {
     const hasWorldTree = state.entities.find(e => e.id === 'world_tree' && e.level > 0);
     const hasRequiredGold = state.player.totalGoldEarned >= 1000000;
     
-    if (hasWorldTree && hasRequiredGold && !state.progress.isGameCleared && !state.progress.hasShownClearScreen) {
+    if (hasWorldTree && hasRequiredGold && !state.progress.hasShownClearScreen) {
       const clearTime = Date.now() - state.player.gameStartTime; // ゲーム開始からの経過時間（ミリ秒）
       const totalEntitiesOwned = state.entities.filter(e => e.level > 0).length;
       
@@ -71,7 +71,7 @@ export function useGameState() {
           clearTime,
           totalEntitiesOwned,
           highestTotalGold: Math.max(state.progress.highestTotalGold, state.player.totalGoldEarned),
-          hasShownClearScreen: true
+          hasShownClearScreen: false // 画面表示前なのでfalse
         }
       };
     }
@@ -160,6 +160,13 @@ export function useGameState() {
             }, 1000);
           }
         }, 0);
+      }
+
+      // 世界樹購入時の特別処理: もう一度クリア判定を実行
+      if (entityId === 'world_tree' && finalState.entities.find(e => e.id === 'world_tree')?.level === 1) {
+        setTimeout(() => {
+          setGameState(current => checkGameClear(current));
+        }, 100);
       }
 
       return finalState;
@@ -253,10 +260,76 @@ export function useGameState() {
       ...prev,
       progress: {
         ...prev.progress,
-        isGameCleared: false // ゲームクリア画面を閉じる
+        hasShownClearScreen: true // クリア画面を閉じる
       }
     }));
     addLog('クリア後も冒険は続きます！さらなる高みを目指しましょう！', 'info');
+  }, [setGameState, addLog]);
+
+  // デバッグ用関数
+  const addDebugGold = useCallback((amount: number) => {
+    setGameState(prev => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        gold: prev.player.gold + amount,
+        totalGoldEarned: prev.player.totalGoldEarned + amount
+      }
+    }));
+    addLog(`デバッグ: ${amount}ゴールドを追加しました`, 'info');
+  }, [setGameState, addLog]);
+
+  const debugCheckGameState = useCallback(() => {
+    // LocalStorageから最新の状態を取得
+    const currentGameData = JSON.parse(localStorage.getItem('incremental-fantasy-save') || '{}');
+    const worldTree = currentGameData.entities?.find((e: any) => e.id === 'world_tree');
+    const hasWorldTree = worldTree && worldTree.level > 0;
+    const hasRequiredGold = (currentGameData.player?.totalGoldEarned || 0) >= 1000000;
+    
+    console.log('=== ゲーム状態デバッグ (最新) ===');
+    console.log('世界樹:', worldTree);
+    console.log('世界樹レベル > 0:', hasWorldTree);
+    console.log('総獲得ゴールド:', currentGameData.player?.totalGoldEarned);
+    console.log('ゴールド条件達成:', hasRequiredGold);
+    console.log('ゲームクリア状態:', currentGameData.progress?.isGameCleared);
+    console.log('クリア画面表示済み:', currentGameData.progress?.hasShownClearScreen);
+    console.log('クリア条件達成:', hasWorldTree && hasRequiredGold);
+    
+    return {
+      worldTree,
+      hasWorldTree,
+      hasRequiredGold,
+      isGameCleared: currentGameData.progress?.isGameCleared,
+      hasShownClearScreen: currentGameData.progress?.hasShownClearScreen,
+      shouldShowClear: hasWorldTree && hasRequiredGold && !currentGameData.progress?.hasShownClearScreen
+    };
+  }, []);
+
+  const debugResetClearState = useCallback(() => {
+    setGameState(prev => ({
+      ...prev,
+      progress: {
+        ...prev.progress,
+        isGameCleared: false,
+        hasShownClearScreen: false
+      }
+    }));
+    addLog('デバッグ: クリア状態をリセットしました', 'info');
+  }, [setGameState, addLog]);
+
+  const debugForceGameClear = useCallback(() => {
+    setGameState(prev => ({
+      ...prev,
+      progress: {
+        ...prev.progress,
+        isGameCleared: true,
+        hasShownClearScreen: false,
+        clearTime: Date.now() - prev.player.gameStartTime,
+        totalEntitiesOwned: prev.entities.filter(e => e.level > 0).length,
+        highestTotalGold: Math.max(prev.progress.highestTotalGold, prev.player.totalGoldEarned)
+      }
+    }));
+    addLog('デバッグ: ゲームクリア状態を強制設定しました', 'info');
   }, [setGameState, addLog]);
 
   useEffect(() => {
@@ -280,6 +353,16 @@ export function useGameState() {
     return () => clearInterval(interval);
   }, [setGameState]);
 
+  // デバッグ用: グローバルにアクセス可能にする
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).debugAddGold = addDebugGold;
+      (window as any).debugCheckGameState = debugCheckGameState;
+      (window as any).debugResetClearState = debugResetClearState;
+      (window as any).debugForceGameClear = debugForceGameClear;
+    }
+  }, [addDebugGold, debugCheckGameState, debugResetClearState]);
+
   return {
     gameState,
     clickGold,
@@ -291,6 +374,10 @@ export function useGameState() {
     nextTutorialStep,
     skipTutorial,
     completeTutorial,
-    continueAfterClear
+    continueAfterClear,
+    addDebugGold,
+    debugCheckGameState,
+    debugResetClearState,
+    debugForceGameClear
   };
 }

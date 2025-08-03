@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerState } from '../types/game';
-import { formatNumber, formatGoldPerSecond, formatTime } from '../utils/formatting';
+import { formatNumber, formatGoldPerSecond } from '../utils/formatting';
 
 interface HeaderProps {
   player: PlayerState;
@@ -41,10 +41,6 @@ export const Header: React.FC<HeaderProps> = ({ player, onResetGame }) => {
             <span className="stat-value">{formatNumber(player.clickPower)}</span>
           </div>
           
-          <div className="stat-item">
-            <span className="stat-label">プレイ時間:</span>
-            <span className="stat-value">{formatTime(player.playtime)}</span>
-          </div>
           
           <div className="stat-item">
             <span className="stat-label">総獲得:</span>

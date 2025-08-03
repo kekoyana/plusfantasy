@@ -23,7 +23,9 @@ function App() {
     nextTutorialStep,
     skipTutorial,
     completeTutorial,
-    continueAfterClear
+    continueAfterClear,
+    executePrestige,
+    buyPrestigeUpgrade
   } = useGameState();
 
   const [upgradeEffect, setUpgradeEffect] = useState<{entityId: string; entityName: string} | null>(null);
@@ -70,8 +72,12 @@ function App() {
           <EntityList 
             entities={gameState.entities}
             player={gameState.player}
+            prestige={gameState.prestige}
+            progress={gameState.progress}
             onBuyEntity={handleBuyEntity}
             onUpgradeClickPower={handleUpgradeClickPower}
+            onExecutePrestige={executePrestige}
+            onBuyPrestigeUpgrade={buyPrestigeUpgrade}
           />
         </div>
       </main>

@@ -1,7 +1,16 @@
 import { useCallback, useEffect } from 'react';
-import { GameState, GameLog, PlayerState, TutorialState, GameProgress } from '../types/game';
+import { GameState, GameLog, PlayerState, TutorialState, GameProgress, PrestigeState } from '../types/game';
 import { initialEntities } from '../data/initial-entities';
+import { initialPrestigeUpgrades } from '../data/prestige-upgrades';
 import { calculateUpgradeCost, calculateTotalGoldPerSecond, canAfford, checkUnlockCondition } from '../utils/calculations';
+import { 
+  calculatePrestigePendingStones, 
+  canPrestige, 
+  calculateUpgradeCost as calculatePrestigeUpgradeCost,
+  canBuyPrestigeUpgrade,
+  calculatePrestigeBonus,
+  checkPrestigeUnlockConditions
+} from '../utils/prestige-calculations';
 import { useLocalStorage } from './useLocalStorage';
 
 const initialPlayerState: PlayerState = {
@@ -10,7 +19,9 @@ const initialPlayerState: PlayerState = {
   goldPerSecond: 0,
   totalGoldEarned: 0,
   playtime: 0,
-  gameStartTime: Date.now()
+  gameStartTime: Date.now(),
+  magicStones: 0,
+  lifetimeMagicStones: 0
 };
 
 const initialTutorialState: TutorialState = {
@@ -25,7 +36,16 @@ const initialGameProgress: GameProgress = {
   clearTime: null,
   totalEntitiesOwned: 0,
   highestTotalGold: 0,
-  hasShownClearScreen: false
+  hasShownClearScreen: false,
+  prestigeLevel: 0,
+  totalPrestigePoints: 0
+};
+
+const initialPrestigeState: PrestigeState = {
+  upgrades: initialPrestigeUpgrades,
+  totalPointsSpent: 0,
+  canPrestige: false,
+  pendingStones: 0
 };
 
 const initialGameState: GameState = {
@@ -33,7 +53,8 @@ const initialGameState: GameState = {
   entities: initialEntities,
   logs: [],
   tutorial: initialTutorialState,
-  progress: initialGameProgress
+  progress: initialGameProgress,
+  prestige: initialPrestigeState
 };
 
 export function useGameState() {
@@ -332,6 +353,102 @@ export function useGameState() {
     addLog('デバッグ: ゲームクリア状態を強制設定しました', 'info');
   }, [setGameState, addLog]);
 
+  // プレステージ関連の関数
+  const executePrestige = useCallback(() => {
+    setGameState(prev => {
+      if (!canPrestige(prev)) {
+        return prev;
+      }
+
+      const stonesEarned = calculatePrestigePendingStones(prev);
+      const newPrestigeLevel = prev.progress.prestigeLevel + 1;
+
+      // プレステージボーナスを適用した新しい初期状態
+      const prestigeBonus = calculatePrestigeBonus(prev.prestige);
+      
+      const newGameState: GameState = {
+        ...initialGameState,
+        player: {
+          ...initialPlayerState,
+          gameStartTime: Date.now(),
+          magicStones: prev.player.magicStones + stonesEarned,
+          lifetimeMagicStones: prev.player.lifetimeMagicStones + stonesEarned,
+          clickPower: Math.floor(initialPlayerState.clickPower * prestigeBonus.clickMultiplier)
+        },
+        entities: initialEntities.map(entity => ({
+          ...entity,
+          // プレステージボーナスを生産力に適用
+          baseProduction: entity.baseProduction * prestigeBonus.productionMultiplier
+        })),
+        progress: {
+          ...initialGameProgress,
+          prestigeLevel: newPrestigeLevel,
+          totalPrestigePoints: prev.progress.totalPrestigePoints + stonesEarned,
+          highestTotalGold: Math.max(prev.progress.highestTotalGold, prev.player.totalGoldEarned)
+        },
+        prestige: {
+          ...prev.prestige,
+          canPrestige: false,
+          pendingStones: 0,
+          upgrades: checkPrestigeUnlockConditions(prev.prestige, {
+            prestigeLevel: newPrestigeLevel,
+            totalPrestigePoints: prev.progress.totalPrestigePoints + stonesEarned
+          })
+        },
+        tutorial: {
+          ...prev.tutorial,
+          isActive: false,
+          hasCompletedTutorial: true
+        }
+      };
+
+      addLog(`プレステージを実行しました！マジックストーン+${stonesEarned}個獲得`, 'success');
+      return newGameState;
+    });
+  }, [setGameState, addLog]);
+
+  const buyPrestigeUpgrade = useCallback((upgradeId: string) => {
+    setGameState(prev => {
+      const upgrade = prev.prestige.upgrades.find(u => u.id === upgradeId);
+      if (!upgrade || !canBuyPrestigeUpgrade(upgrade, prev.player.magicStones)) {
+        return prev;
+      }
+
+      const cost = calculatePrestigeUpgradeCost(upgrade);
+      const updatedUpgrades = prev.prestige.upgrades.map(u =>
+        u.id === upgradeId 
+          ? { ...u, currentLevel: u.currentLevel + 1 }
+          : u
+      );
+
+      const newState = {
+        ...prev,
+        player: {
+          ...prev.player,
+          magicStones: prev.player.magicStones - cost
+        },
+        prestige: {
+          ...prev.prestige,
+          upgrades: updatedUpgrades,
+          totalPointsSpent: prev.prestige.totalPointsSpent + cost
+        }
+      };
+
+      // アンロック条件をチェック
+      newState.prestige.upgrades = checkPrestigeUnlockConditions(newState.prestige, newState.progress);
+
+      addLog(`${upgrade.name}をアップグレードしました！`, 'success');
+      return newState;
+    });
+  }, [setGameState, addLog]);
+
+  // プレステージ状態を動的に計算（リアルタイム）
+  const prestigeStateWithCalculations = {
+    ...gameState.prestige,
+    canPrestige: canPrestige(gameState),
+    pendingStones: calculatePrestigePendingStones(gameState)
+  };
+
   useEffect(() => {
     let lastUpdate = Date.now();
     
@@ -364,7 +481,10 @@ export function useGameState() {
   }, [addDebugGold, debugCheckGameState, debugResetClearState]);
 
   return {
-    gameState,
+    gameState: {
+      ...gameState,
+      prestige: prestigeStateWithCalculations
+    },
     clickGold,
     buyEntity,
     upgradeClickPower,
@@ -378,6 +498,8 @@ export function useGameState() {
     addDebugGold,
     debugCheckGameState,
     debugResetClearState,
-    debugForceGameClear
+    debugForceGameClear,
+    executePrestige,
+    buyPrestigeUpgrade
   };
 }

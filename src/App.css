@@ -1871,3 +1871,393 @@ body {
     flex-direction: column;
   }
 }
+
+/* Prestige Panel Styles */
+.prestige-panel {
+  padding: 1rem;
+  height: 100%;
+  overflow-y: auto;
+  color: #ffffff;
+}
+
+.prestige-section {
+  background: #333333;
+  border: 2px solid #ffffff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.prestige-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.prestige-header h3 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: #ffff00;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.prestige-level {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  color: #66ccff;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.current-stones {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.stones-icon {
+  font-size: 1.5rem;
+}
+
+.stones-amount {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: #ff66ff;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.stones-label {
+  font-size: 0.8rem;
+  color: #cccccc;
+}
+
+.prestige-preview {
+  background: #222222;
+  border: 1px solid #666666;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+}
+
+.prestige-preview p {
+  margin: 0 0 0.5rem 0;
+  color: #ffff00;
+}
+
+.prestige-preview ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: #ffffff;
+}
+
+.prestige-button {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.prestige-button.enabled {
+  background: #ff6600;
+  box-shadow: 
+    inset 1px 1px 0 #ff9933,
+    inset -1px -1px 0 #cc3300;
+}
+
+.prestige-button.enabled:hover {
+  background: #ff9900;
+  box-shadow: 
+    inset 1px 1px 0 #ffcc66,
+    inset -1px -1px 0 #ff6600;
+}
+
+.prestige-button.disabled {
+  background: #666666;
+  cursor: not-allowed;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
+}
+
+.upgrades-section {
+  margin-top: 1rem;
+}
+
+.upgrades-section h4 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9rem;
+  color: #66ccff;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.upgrades-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.upgrade-card {
+  background: #333333;
+  border: 2px solid #ffffff;
+  padding: 0.8rem;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.upgrade-card.locked {
+  opacity: 0.5;
+  background: #444444;
+}
+
+.upgrade-card.maxed {
+  border-color: #ffff00;
+  background: #444400;
+}
+
+.upgrade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.upgrade-header h5 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.upgrade-level {
+  font-size: 0.7rem;
+  color: #ffff00;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.upgrade-description {
+  font-size: 0.7rem;
+  color: #cccccc;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.upgrade-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.upgrade-buy-button {
+  padding: 0.6rem 1rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.upgrade-buy-button.enabled {
+  background: #00cc00;
+  box-shadow: 
+    inset 1px 1px 0 #33ff33,
+    inset -1px -1px 0 #009900;
+}
+
+.upgrade-buy-button.enabled:hover {
+  background: #00ff00;
+  box-shadow: 
+    inset 1px 1px 0 #66ff66,
+    inset -1px -1px 0 #00cc00;
+}
+
+.upgrade-buy-button.disabled {
+  background: #666666;
+  cursor: not-allowed;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
+}
+
+.upgrade-maxed {
+  color: #ffff00;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.upgrade-locked {
+  text-align: center;
+}
+
+.unlock-condition {
+  font-size: 0.7rem;
+  color: #ff9999;
+  margin: 0;
+}
+
+/* Prestige Confirm Dialog */
+.prestige-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 51, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.prestige-confirm-dialog {
+  background: #000000;
+  border: 4px solid #ffffff;
+  max-width: 600px;
+  width: 90%;
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    4px 4px 0 #000000;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.prestige-confirm-dialog h3 {
+  margin: 0 0 1rem 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: #ff9900;
+  text-shadow: 1px 1px 0 #000000;
+  padding: 1rem;
+  background: #333333;
+  border-bottom: 2px solid #ffffff;
+}
+
+.prestige-confirm-dialog p {
+  margin: 0 0 1rem 0;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.prestige-warning {
+  background: #333333;
+  margin: 1rem;
+  padding: 1rem;
+  border: 2px solid #ff9900;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
+}
+
+.prestige-warning p {
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+}
+
+.prestige-warning ul {
+  margin: 0 0 1rem 0;
+  padding-left: 1rem;
+  font-size: 0.8rem;
+}
+
+.confirm-buttons {
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  border-top: 2px solid #ffffff;
+  background: #333333;
+}
+
+.confirm-button {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #ffffff;
+  min-width: 120px;
+}
+
+.confirm-button.execute {
+  background: #ff6600;
+  box-shadow: 
+    inset 1px 1px 0 #ff9933,
+    inset -1px -1px 0 #cc3300;
+}
+
+.confirm-button.execute:hover {
+  background: #ff9900;
+  box-shadow: 
+    inset 1px 1px 0 #ffcc66,
+    inset -1px -1px 0 #ff6600;
+}
+
+.confirm-button.cancel {
+  background: #666666;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
+}
+
+.confirm-button.cancel:hover {
+  background: #888888;
+  box-shadow: 
+    inset 1px 1px 0 #bbbbbb,
+    inset -1px -1px 0 #555555;
+}
+
+/* Mobile adjustments for prestige */
+@media (max-width: 768px) {
+  .prestige-panel {
+    padding: 0.5rem;
+  }
+
+  .prestige-section {
+    padding: 0.8rem;
+  }
+
+  .prestige-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .stones-amount {
+    font-size: 1rem;
+  }
+
+  .upgrade-card {
+    padding: 0.6rem;
+  }
+
+  .upgrade-header h5 {
+    font-size: 0.7rem;
+  }
+
+  .upgrade-description {
+    font-size: 0.65rem;
+  }
+
+  .prestige-confirm-dialog {
+    width: 95%;
+  }
+
+  .confirm-buttons {
+    flex-direction: column;
+  }
+
+  .confirm-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

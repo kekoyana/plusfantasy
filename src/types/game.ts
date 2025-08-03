@@ -5,6 +5,8 @@ export interface PlayerState {
   totalGoldEarned: number;
   playtime: number;
   gameStartTime: number;
+  magicStones: number;
+  lifetimeMagicStones: number;
 }
 
 export interface TutorialState {
@@ -20,6 +22,8 @@ export interface GameProgress {
   totalEntitiesOwned: number;
   highestTotalGold: number;
   hasShownClearScreen: boolean;
+  prestigeLevel: number;
+  totalPrestigePoints: number;
 }
 
 export interface UnlockCondition {
@@ -46,6 +50,7 @@ export interface GameState {
   logs: GameLog[];
   tutorial: TutorialState;
   progress: GameProgress;
+  prestige: PrestigeState;
 }
 
 export interface GameLog {
@@ -53,6 +58,37 @@ export interface GameLog {
   message: string;
   timestamp: number;
   type: 'info' | 'success' | 'warning';
+}
+
+export interface PrestigeUpgrade {
+  id: string;
+  name: string;
+  description: string;
+  cost: number;
+  maxLevel: number;
+  currentLevel: number;
+  effect: PrestigeEffect;
+  unlockCondition?: PrestigeUnlockCondition;
+  isUnlocked: boolean;
+}
+
+export interface PrestigeEffect {
+  type: 'click_multiplier' | 'production_multiplier' | 'unlock_discount' | 'special';
+  value: number;
+  isPercentage: boolean;
+}
+
+export interface PrestigeUnlockCondition {
+  type: 'prestige_level' | 'total_stones' | 'upgrade_level';
+  threshold: number;
+  upgradeId?: string;
+}
+
+export interface PrestigeState {
+  upgrades: PrestigeUpgrade[];
+  totalPointsSpent: number;
+  canPrestige: boolean;
+  pendingStones: number;
 }
 
 export interface SaveData {

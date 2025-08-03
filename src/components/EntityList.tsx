@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { GameEntity, PlayerState } from '../types/game';
+import { GameEntity, PlayerState, PrestigeState, GameProgress } from '../types/game';
 import { calculateUpgradeCost, calculateProduction, canAfford } from '../utils/calculations';
 import { formatNumber, formatGoldPerSecond } from '../utils/formatting';
+import { PrestigePanel } from './PrestigePanel';
 
 const getEntityIcon = (entityId: string): string => {
   const icons: Record<string, string> = {
@@ -38,17 +39,25 @@ const getEntityIcon = (entityId: string): string => {
 interface EntityListProps {
   entities: GameEntity[];
   player: PlayerState;
+  prestige: PrestigeState;
+  progress: GameProgress;
   onBuyEntity: (entityId: string) => void;
   onUpgradeClickPower: () => void;
+  onExecutePrestige: () => void;
+  onBuyPrestigeUpgrade: (upgradeId: string) => void;
 }
 
-type TabType = 'companions' | 'facilities' | 'upgrades';
+type TabType = 'companions' | 'facilities' | 'upgrades' | 'prestige';
 
 export const EntityList: React.FC<EntityListProps> = ({ 
   entities, 
   player, 
+  prestige,
+  progress,
   onBuyEntity,
-  onUpgradeClickPower 
+  onUpgradeClickPower,
+  onExecutePrestige,
+  onBuyPrestigeUpgrade
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('companions');
 
@@ -126,6 +135,12 @@ export const EntityList: React.FC<EntityListProps> = ({
         >
           アップグレード
         </button>
+        <button 
+          className={`tab ${activeTab === 'prestige' ? 'active' : ''}`}
+          onClick={() => setActiveTab('prestige')}
+        >
+          プレステージ
+        </button>
       </div>
 
       <div className="entity-content">
@@ -175,6 +190,16 @@ export const EntityList: React.FC<EntityListProps> = ({
               </button>
             </div>
           </div>
+        )}
+
+        {activeTab === 'prestige' && (
+          <PrestigePanel
+            prestige={prestige}
+            player={player}
+            progress={progress}
+            onExecutePrestige={onExecutePrestige}
+            onBuyUpgrade={onBuyPrestigeUpgrade}
+          />
         )}
       </div>
     </div>

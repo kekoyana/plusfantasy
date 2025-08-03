@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap');
 
 /* Global Styles */
 * {
@@ -7,15 +7,14 @@
 
 body {
   margin: 0;
-  font-family: 'Cinzel', serif;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 48, 0.15), transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.15), transparent 50%),
-    linear-gradient(135deg, #0f0c29 0%, #24243e 50%, #302b63 100%);
+  font-family: 'Press Start 2P', monospace;
+  background: #000000;
   min-height: 100vh;
-  color: #e5ddd5;
+  color: #ffffff;
   background-attachment: fixed;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 #root {
@@ -31,65 +30,28 @@ body {
   min-height: 100vh;
   max-width: 1400px;
   margin: 0 auto;
-  background: 
-    linear-gradient(145deg, rgba(46, 41, 78, 0.95) 0%, rgba(36, 36, 62, 0.9) 100%);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(218, 165, 32, 0.3);
-  border-radius: 15px;
+  background: #000000;
+  border: 4px solid #ffffff;
   box-shadow: 
-    0 0 30px rgba(218, 165, 32, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    4px 4px 0 #000000;
   position: relative;
 }
 
-.app::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 2px,
-      rgba(218, 165, 32, 0.03) 2px,
-      rgba(218, 165, 32, 0.03) 4px
-    );
-  pointer-events: none;
-  border-radius: 15px;
-}
 
 /* Header Styles */
 .game-header {
-  background: 
-    linear-gradient(135deg, rgba(139, 69, 19, 0.6) 0%, rgba(184, 134, 11, 0.7) 50%, rgba(218, 165, 32, 0.6) 100%);
-  color: #fff8dc;
-  padding: 0.75rem 1rem;
-  border-bottom: 2px solid rgba(218, 165, 32, 0.4);
+  background: #000000;
+  color: #ffffff;
+  padding: 1rem;
+  border-bottom: 4px solid #ffffff;
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    inset 2px 2px 0 #666666,
+    inset -2px 0 0 #333333;
   position: relative;
-  backdrop-filter: blur(5px);
 }
 
-.game-header::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(218, 165, 32, 0.6) 0px,
-    rgba(218, 165, 32, 0.6) 8px,
-    rgba(184, 134, 11, 0.6) 8px,
-    rgba(184, 134, 11, 0.6) 16px
-  );
-}
 
 .header-content {
   display: flex;
@@ -105,23 +67,18 @@ body {
 }
 
 .gold-amount {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffd700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.5rem;
+  color: #ffff00;
   text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.5),
-    0 0 8px rgba(255, 215, 0, 0.4);
-  letter-spacing: 1px;
+    1px 1px 0 #000000,
+    2px 2px 0 #666600;
 }
 
 .gold-label {
-  font-size: 0.9rem;
-  color: #fff8dc;
-  opacity: 0.8;
-  font-weight: 500;
+  font-size: 0.8rem;
+  color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .stats {
@@ -134,44 +91,47 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  border: 1px solid rgba(218, 165, 32, 0.3);
+  background: #333333;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #ffffff;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
   min-width: auto;
 }
 
 .stat-label {
   font-size: 0.7rem;
-  color: #daa520;
+  color: #cccccc;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
 }
 
 .stat-value {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #fff8dc;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #000000;
 }
 
 /* Reset Button */
 .reset-button {
-  background: rgba(239, 68, 68, 0.8);
-  border: 1px solid rgba(239, 68, 68, 0.6);
-  border-radius: 6px;
-  color: white;
-  padding: 0.5rem;
-  font-size: 1rem;
+  background: #cc0000;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  font-family: 'Press Start 2P', monospace;
   cursor: pointer;
-  transition: all 0.2s;
   margin-left: 1rem;
+  box-shadow: 
+    inset 1px 1px 0 #ff3333,
+    inset -1px -1px 0 #990000;
 }
 
 .reset-button:hover {
-  background: rgba(239, 68, 68, 1);
-  transform: translateY(-1px);
+  background: #ff0000;
+  box-shadow: 
+    inset 1px 1px 0 #ff6666,
+    inset -1px -1px 0 #cc0000;
 }
 
 /* Reset Confirm Dialog */
@@ -181,7 +141,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 51, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,28 +149,32 @@ body {
 }
 
 .reset-confirm-dialog {
-  background: linear-gradient(145deg, rgba(35, 35, 56, 0.95) 0%, rgba(28, 28, 45, 0.9) 100%);
-  border: 2px solid rgba(218, 165, 32, 0.4);
-  border-radius: 12px;
+  background: #000000;
+  border: 4px solid #ffffff;
   padding: 2rem;
   max-width: 400px;
   width: 90%;
   text-align: center;
-  color: #e5ddd5;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  box-shadow: 
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    4px 4px 0 #000000;
 }
 
 .reset-confirm-dialog h3 {
   margin: 0 0 1rem 0;
-  color: #ffd700;
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 1.3rem;
+  color: #ffff00;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  text-shadow: 1px 1px 0 #000000;
 }
 
 .reset-confirm-dialog p {
   margin: 0 0 1.5rem 0;
-  line-height: 1.5;
-  color: #daa520;
+  line-height: 1.8;
+  color: #ffffff;
+  font-size: 0.8rem;
 }
 
 .reset-confirm-buttons {
@@ -220,33 +184,41 @@ body {
 }
 
 .confirm-button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
+  padding: 0.8rem 1rem;
+  border: 2px solid #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.2s;
   min-width: 100px;
+  color: #ffffff;
 }
 
 .confirm-button.danger {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
+  background: #cc0000;
+  box-shadow: 
+    inset 1px 1px 0 #ff3333,
+    inset -1px -1px 0 #990000;
 }
 
 .confirm-button.danger:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  transform: translateY(-1px);
+  background: #ff0000;
+  box-shadow: 
+    inset 1px 1px 0 #ff6666,
+    inset -1px -1px 0 #cc0000;
 }
 
 .confirm-button.cancel {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
-  color: white;
+  background: #666666;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
 }
 
 .confirm-button.cancel:hover {
-  background: linear-gradient(135deg, #4b5563, #374151);
-  transform: translateY(-1px);
+  background: #888888;
+  box-shadow: 
+    inset 1px 1px 0 #bbbbbb,
+    inset -1px -1px 0 #555555;
 }
 
 /* Main Content */
@@ -256,13 +228,13 @@ body {
   gap: 1rem;
   padding: 1rem;
   background: 
-    linear-gradient(135deg, rgba(15, 12, 41, 0.7) 0%, rgba(36, 36, 62, 0.8) 50%, rgba(48, 43, 99, 0.7) 100%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(51, 51, 51, 0.6) 50%, rgba(0, 0, 0, 0.8) 100%),
     url('/bg.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 15px;
   position: relative;
+  image-rendering: pixelated;
 }
 
 .click-section {
@@ -301,15 +273,13 @@ body {
 
 .side-panel {
   flex: 0 0 400px;
-  background: 
-    linear-gradient(145deg, rgba(35, 35, 56, 0.95) 0%, rgba(28, 28, 45, 0.9) 100%);
-  border: 2px solid rgba(218, 165, 32, 0.4);
-  border-radius: 12px;
+  background: #000000;
+  border: 4px solid #ffffff;
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    inset 2px 2px 0 #666666,
+    inset -2px -2px 0 #333333,
+    2px 2px 0 #000000;
   overflow: hidden;
-  backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 140px);
@@ -324,21 +294,18 @@ body {
 }
 
 .click-button {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 4px solid rgba(218, 165, 32, 0.8);
-  background: 
-    radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.9) 0%, rgba(218, 165, 32, 0.8) 50%, rgba(184, 134, 11, 0.9) 100%);
-  color: #2d1810;
+  width: 200px;
+  height: 120px;
+  border: 4px solid #ffffff;
+  background: #0066cc;
+  color: #ffffff;
   font-size: 4rem;
+  font-family: 'Press Start 2P', monospace;
   cursor: pointer;
   box-shadow: 
-    0 0 20px rgba(218, 165, 32, 0.4),
-    0 8px 16px rgba(0, 0, 0, 0.3),
-    inset 0 2px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
-  transition: all 0.1s ease;
+    inset 2px 2px 0 #3399ff,
+    inset -2px -2px 0 #003399,
+    2px 2px 0 #000000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -347,63 +314,47 @@ body {
   position: relative;
 }
 
-.click-button::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  right: -6px;
-  bottom: -6px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, rgba(218, 165, 32, 0.3), rgba(255, 215, 0, 0.6), rgba(218, 165, 32, 0.3));
-  z-index: -1;
-  animation: rotate 3s linear infinite;
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .click-button:hover {
-  transform: translateY(-3px);
+  background: #3399ff;
   box-shadow: 
-    0 0 30px rgba(218, 165, 32, 0.6),
-    0 12px 25px rgba(0, 0, 0, 0.4);
+    inset 2px 2px 0 #66ccff,
+    inset -2px -2px 0 #0066cc,
+    2px 2px 0 #000000;
 }
 
 .click-button:active {
-  transform: translateY(-1px);
+  background: #0052cc;
   box-shadow: 
-    0 0 15px rgba(218, 165, 32, 0.4),
-    0 6px 12px rgba(0, 0, 0, 0.3);
+    inset 1px 1px 0 #0066ff,
+    inset -1px -1px 0 #003399,
+    1px 1px 0 #000000;
 }
 
 .click-button-text {
-  font-size: 5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 3rem;
+  text-shadow: 1px 1px 0 #000000;
 }
 
 .click-button-label {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.6rem;
+  font-family: 'Press Start 2P', monospace;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0 #000000;
 }
 
 .click-effect {
   position: absolute;
-  color: #ffd700;
+  color: #ffff00;
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 1rem;
+  font-family: 'Press Start 2P', monospace;
   pointer-events: none;
   animation: click-float 1.2s ease-out forwards;
   z-index: 10;
   text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 8px rgba(255, 215, 0, 0.6);
-  font-family: 'Cinzel Decorative', serif;
+    1px 1px 0 #000000,
+    2px 2px 0 #666600;
 }
 
 @keyframes click-float {
@@ -427,28 +378,36 @@ body {
 
 .entity-tabs {
   display: flex;
-  background: #f3f4f6;
+  background: #333333;
 }
 
 .tab {
   flex: 1;
   padding: 0.75rem;
-  border: none;
-  background: transparent;
+  border: 2px solid #ffffff;
+  background: #666666;
+  color: #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
   cursor: pointer;
-  font-weight: 500;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
 }
 
 .tab:hover {
-  background: #e5e7eb;
+  background: #888888;
+  box-shadow: 
+    inset 1px 1px 0 #bbbbbb,
+    inset -1px -1px 0 #555555;
 }
 
 .tab.active {
-  background: white;
-  border-bottom-color: #4f46e5;
-  color: #4f46e5;
+  background: #0066cc;
+  color: #ffffff;
+  box-shadow: 
+    inset 1px 1px 0 #3399ff,
+    inset -1px -1px 0 #003399;
 }
 
 .entity-content {
@@ -456,6 +415,8 @@ body {
   overflow-y: auto;
   padding: 1rem;
   max-height: calc(100vh - 300px);
+  background: #000000;
+  color: #ffffff;
 }
 
 /* カスタムスクロールバー */
@@ -487,21 +448,25 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: white;
-  transition: all 0.2s;
+  padding: 0.8rem;
+  border: 2px solid #ffffff;
+  background: #333333;
+  margin-bottom: 0.5rem;
+  box-shadow: 
+    inset 1px 1px 0 #666666,
+    inset -1px -1px 0 #111111;
 }
 
 .entity-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
+  background: #555555;
+  box-shadow: 
+    inset 1px 1px 0 #888888,
+    inset -1px -1px 0 #222222;
 }
 
 .entity-item.unaffordable {
-  opacity: 0.6;
-  background: #f9fafb;
+  opacity: 0.5;
+  background: #444444;
 }
 
 .entity-info {
@@ -523,71 +488,81 @@ body {
 
 .entity-name {
   font-weight: bold;
-  color: #374151;
+  color: #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
 }
 
 .entity-description {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 0.7rem;
+  color: #cccccc;
   margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
 .entity-stats {
   display: flex;
   gap: 1rem;
-  font-size: 0.75rem;
-  color: #9ca3af;
+  font-size: 0.7rem;
+  color: #ffffff;
 }
 
 .entity-level {
   font-weight: 500;
+  color: #ffff00;
 }
 
 .entity-production {
-  color: #10b981;
+  color: #00ff00;
   font-weight: 500;
 }
 
 .entity-upgrade-info {
-  color: #3b82f6;
+  color: #66ccff;
   font-weight: 500;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .buy-button {
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #ffffff;
+  background: #00cc00;
+  color: #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
   cursor: pointer;
-  transition: all 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
   min-width: 80px;
+  box-shadow: 
+    inset 1px 1px 0 #33ff33,
+    inset -1px -1px 0 #009900;
 }
 
 .buy-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669, #047857);
-  transform: translateY(-1px);
+  background: #00ff00;
+  box-shadow: 
+    inset 1px 1px 0 #66ff66,
+    inset -1px -1px 0 #00cc00;
 }
 
 .buy-button:disabled {
-  background: #d1d5db;
+  background: #666666;
   cursor: not-allowed;
-  transform: none;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
 }
 
 .buy-cost {
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   font-weight: bold;
 }
 
 .buy-label {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
 }
 
 .no-entities {
@@ -599,50 +574,55 @@ body {
 
 /* Log Panel */
 .footer {
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
+  background: #000000;
+  border-top: 4px solid #ffffff;
   min-height: 60px;
 }
 
 .log-toggle {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  background: white;
+  border-bottom: 2px solid #ffffff;
+  background: #333333;
 }
 
 .toggle-logs-button {
   padding: 0.5rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #374151;
-  font-size: 0.875rem;
-  font-weight: 500;
+  border: 2px solid #ffffff;
+  background: #666666;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-family: 'Press Start 2P', monospace;
   cursor: pointer;
-  transition: all 0.2s;
+  box-shadow: 
+    inset 1px 1px 0 #999999,
+    inset -1px -1px 0 #333333;
 }
 
 .toggle-logs-button:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+  background: #888888;
+  box-shadow: 
+    inset 1px 1px 0 #bbbbbb,
+    inset -1px -1px 0 #555555;
 }
 
 .log-panel {
   height: 200px;
   display: flex;
   flex-direction: column;
+  background: #000000;
 }
 
 .log-header {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  background: white;
+  border-bottom: 2px solid #ffffff;
+  background: #333333;
 }
 
 .log-header h3 {
   margin: 0;
-  font-size: 1rem;
-  color: #374151;
+  font-size: 0.8rem;
+  font-family: 'Press Start 2P', monospace;
+  color: #ffffff;
 }
 
 .log-content {

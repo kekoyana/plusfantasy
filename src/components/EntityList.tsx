@@ -3,6 +3,38 @@ import { GameEntity, PlayerState } from '../types/game';
 import { calculateUpgradeCost, calculateProduction, canAfford } from '../utils/calculations';
 import { formatNumber, formatGoldPerSecond } from '../utils/formatting';
 
+const getEntityIcon = (entityId: string): string => {
+  const icons: Record<string, string> = {
+    // 仲間
+    'apprentice': '👤',
+    'warrior': '⚔️',
+    'archer': '🏹',
+    'rogue': '🗡️',
+    'mage': '🧙‍♂️',
+    'cleric': '⛪',
+    'paladin': '🛡️',
+    'necromancer': '💀',
+    'dragon': '🐉',
+    'phoenix': '🔥',
+    
+    // 施設
+    'small_mine': '⛏️',
+    'logging_camp': '🪓',
+    'farm': '🌾',
+    'smithy': '🔨',
+    'tavern': '🍺',
+    'magic_tower': '🗼',
+    'library': '📚',
+    'cathedral': '⛪',
+    'colosseum': '🏟️',
+    'dark_fortress': '🏰',
+    'dragon_lair': '🕳️',
+    'treasury': '🏛️',
+    'world_tree': '🌳'
+  };
+  return icons[entityId] || '❓';
+};
+
 interface EntityListProps {
   entities: GameEntity[];
   player: PlayerState;
@@ -27,19 +59,30 @@ export const EntityList: React.FC<EntityListProps> = ({
 
   const renderEntity = (entity: GameEntity) => {
     const cost = calculateUpgradeCost(entity.baseCost, entity.level);
-    const production = calculateProduction(entity);
+    const currentProduction = calculateProduction(entity);
+    const nextLevelEntity = { ...entity, level: entity.level + 1 };
+    const nextProduction = calculateProduction(nextLevelEntity);
+    const productionIncrease = nextProduction - currentProduction;
     const affordable = canAfford(player.gold, cost);
 
     return (
       <div key={entity.id} className={`entity-item ${!affordable ? 'unaffordable' : ''}`}>
         <div className="entity-info">
-          <div className="entity-name">{entity.name}</div>
+          <div className="entity-header">
+            <span className="entity-icon">{getEntityIcon(entity.id)}</span>
+            <span className="entity-name">{entity.name}</span>
+          </div>
           <div className="entity-description">{entity.description}</div>
           <div className="entity-stats">
             <span className="entity-level">レベル: {entity.level}</span>
             {entity.level > 0 && (
               <span className="entity-production">
-                生産: {formatGoldPerSecond(production)}
+                生産: {formatGoldPerSecond(currentProduction)}
+              </span>
+            )}
+            {productionIncrease > 0 && (
+              <span className="entity-upgrade-info">
+                アップグレード: +{formatGoldPerSecond(productionIncrease)}
               </span>
             )}
           </div>

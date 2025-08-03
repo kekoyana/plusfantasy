@@ -500,10 +500,22 @@ body {
   flex: 1;
 }
 
+.entity-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.entity-icon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
 .entity-name {
   font-weight: bold;
   color: #374151;
-  margin-bottom: 0.25rem;
 }
 
 .entity-description {
@@ -526,6 +538,12 @@ body {
 .entity-production {
   color: #10b981;
   font-weight: 500;
+}
+
+.entity-upgrade-info {
+  color: #3b82f6;
+  font-weight: 500;
+  font-size: 0.75rem;
 }
 
 .buy-button {

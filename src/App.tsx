@@ -9,6 +9,8 @@ import { CompanionDisplay } from './components/CompanionDisplay';
 import { UpgradeEffect } from './components/UpgradeEffect';
 import { Tutorial } from './components/Tutorial';
 import { GameClear } from './components/GameClear';
+import OfflineProgressModal from './components/OfflineProgressModal';
+import AchievementPanel from './components/AchievementPanel';
 import './App.css'
 
 function App() {
@@ -23,11 +25,15 @@ function App() {
     nextTutorialStep,
     skipTutorial,
     completeTutorial,
-    continueAfterClear
+    continueAfterClear,
+    offlineProgress,
+    showOfflineModal,
+    handleOfflineProgress
   } = useGameState();
 
   const [upgradeEffect, setUpgradeEffect] = useState<{entityId: string; entityName: string} | null>(null);
   const [showLogs, setShowLogs] = useState<boolean>(false);
+  const [showAchievements, setShowAchievements] = useState<boolean>(false);
 
   useAutoGold(gameState.player.goldPerSecond, addAutoGold);
 
@@ -84,6 +90,13 @@ function App() {
           >
             {showLogs ? 'ログを隠す' : 'ログを表示'}
           </button>
+          <button 
+            className="toggle-logs-button"
+            onClick={() => setShowAchievements(!showAchievements)}
+            style={{ marginLeft: '10px' }}
+          >
+            🏆 実績
+          </button>
         </div>
         {showLogs && <LogPanel logs={gameState.logs} />}
       </footer>
@@ -106,6 +119,20 @@ function App() {
         player={gameState.player}
         onContinue={continueAfterClear}
         onResetGame={resetGame}
+      />
+
+      {showOfflineModal && offlineProgress && (
+        <OfflineProgressModal
+          offlineProgress={offlineProgress}
+          offlineTimeMs={Date.now() - offlineProgress.lastPlayTime}
+          onContinue={handleOfflineProgress}
+        />
+      )}
+
+      <AchievementPanel
+        achievements={gameState.achievements}
+        isVisible={showAchievements}
+        onClose={() => setShowAchievements(false)}
       />
     </div>
   );

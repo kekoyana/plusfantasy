@@ -5,6 +5,7 @@ export interface PlayerState {
   totalGoldEarned: number;
   playtime: number;
   gameStartTime: number;
+  lastPlayTime: number;
 }
 
 export interface TutorialState {
@@ -46,6 +47,8 @@ export interface GameState {
   logs: GameLog[];
   tutorial: TutorialState;
   progress: GameProgress;
+  achievements: Achievement[];
+  multipliers: Multipliers;
 }
 
 export interface GameLog {
@@ -58,4 +61,47 @@ export interface GameLog {
 export interface SaveData {
   gameState: GameState;
   lastSaved: number;
+}
+
+export interface OfflineProgress {
+  lastPlayTime: number;
+  maxOfflineHours: number;
+  offlineEfficiency: number;
+  offlineGoldEarned: number;
+}
+
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  condition: AchievementCondition;
+  reward: AchievementReward;
+  isUnlocked: boolean;
+  isCompleted: boolean;
+}
+
+export interface AchievementCondition {
+  type: 'totalGold' | 'entityLevel' | 'clicks' | 'timeSpent';
+  target: number;
+  entityId?: string;
+}
+
+export interface AchievementReward {
+  type: 'multiplier' | 'currency' | 'unlock';
+  value: number;
+  description: string;
+}
+
+export interface Multipliers {
+  global: {
+    clickMultiplier: number;
+    productionMultiplier: number;
+    goldMultiplier: number;
+  };
+  
+  permanent: {
+    source: 'achievement' | 'prestige' | 'upgrade';
+    type: 'click' | 'production' | 'gold';
+    multiplier: number;
+  }[];
 }

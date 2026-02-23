@@ -91,7 +91,7 @@ export const CompanionDisplay: React.FC<CompanionDisplayProps> = ({ entities }) 
               {companions.map(entity => (
                 <div key={entity.id} className={`entity-section ${entity.category}`}>
                   <div className="entity-icons">
-                    {Array.from({ length: Math.min(entity.level, 15) }, (_, index) => (
+                    {Array.from({ length: Math.min(entity.level, 5) }, (_, index) => (
                       <div 
                         key={index} 
                         className="entity-icon"
@@ -103,9 +103,9 @@ export const CompanionDisplay: React.FC<CompanionDisplayProps> = ({ entities }) 
                         {getEntityIcon(entity.id)}
                       </div>
                     ))}
-                    {entity.level > 15 && (
-                      <div className="overflow-indicator" title={`${entity.name} - 合計レベル${entity.level}`}>
-                        +{entity.level - 15}
+                    {entity.level > 5 && (
+                      <div className="multiplier-indicator" title={`${entity.name} - 合計レベル${entity.level}`}>
+                        x{entity.level}
                       </div>
                     )}
                   </div>

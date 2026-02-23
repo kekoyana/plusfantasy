@@ -1113,7 +1113,8 @@ body {
   }
 }
 
-.overflow-indicator {
+.overflow-indicator,
+.multiplier-indicator {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
   border-radius: 12px;
@@ -1311,7 +1312,8 @@ body {
     gap: 0.02rem;
   }
 
-  .overflow-indicator {
+  .overflow-indicator,
+  .multiplier-indicator {
     font-size: 0.65rem;
     padding: 0.2rem 0.4rem;
   }

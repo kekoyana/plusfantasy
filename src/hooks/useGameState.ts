@@ -490,6 +490,61 @@ export function useGameState() {
     addLog('デバッグ: ゲームクリア状態を強制設定しました', 'info');
   }, [setGameState, addLog]);
 
+  const debugAddMagicStones = useCallback((amount: number) => {
+    setGameState(prev => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        magicStones: prev.player.magicStones + amount,
+        lifetimeMagicStones: prev.player.lifetimeMagicStones + amount
+      }
+    }));
+    addLog(`デバッグ: マジックストーン+${amount}個を追加しました`, 'info');
+  }, [setGameState, addLog]);
+
+  const debugResetMagicStones = useCallback(() => {
+    setGameState(prev => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        magicStones: 0,
+        lifetimeMagicStones: 0
+      }
+    }));
+    addLog('デバッグ: マジックストーンをリセットしました', 'info');
+  }, [setGameState, addLog]);
+
+  const debugCheckPrestigeState = useCallback(() => {
+    const currentGameData = JSON.parse(localStorage.getItem('incremental-fantasy-save') || '{}');
+    const canPrestigeNow = canPrestige(gameState);
+    const pendingStones = calculatePrestigePendingStones(gameState);
+    
+    console.log('=== プレステージ状態デバッグ ===');
+    console.log('現在のマジックストーン:', currentGameData.player?.magicStones || 0);
+    console.log('生涯マジックストーン:', currentGameData.player?.lifetimeMagicStones || 0);
+    console.log('プレステージレベル:', currentGameData.progress?.prestigeLevel || 0);
+    console.log('総プレステージポイント:', currentGameData.progress?.totalPrestigePoints || 0);
+    console.log('プレステージ可能:', canPrestigeNow);
+    console.log('獲得予定ストーン:', pendingStones);
+    console.log('総獲得ゴールド:', currentGameData.player?.totalGoldEarned || 0);
+    console.log('ゲームクリア済み:', currentGameData.progress?.isGameCleared || false);
+    console.log('プレステージアップグレード:', currentGameData.prestige?.upgrades?.map((u: any) => ({
+      name: u.name,
+      level: u.currentLevel,
+      maxLevel: u.maxLevel,
+      unlocked: u.isUnlocked
+    })) || []);
+    
+    return {
+      magicStones: currentGameData.player?.magicStones || 0,
+      lifetimeMagicStones: currentGameData.player?.lifetimeMagicStones || 0,
+      prestigeLevel: currentGameData.progress?.prestigeLevel || 0,
+      canPrestige: canPrestigeNow,
+      pendingStones: pendingStones,
+      upgrades: currentGameData.prestige?.upgrades || []
+    };
+  }, [gameState]);
+
   // プレステージ関連の関数
   const executePrestige = useCallback(() => {
     setGameState(prev => {
@@ -614,8 +669,11 @@ export function useGameState() {
       (window as any).debugCheckGameState = debugCheckGameState;
       (window as any).debugResetClearState = debugResetClearState;
       (window as any).debugForceGameClear = debugForceGameClear;
+      (window as any).debugAddMagicStones = debugAddMagicStones;
+      (window as any).debugResetMagicStones = debugResetMagicStones;
+      (window as any).debugCheckPrestigeState = debugCheckPrestigeState;
     }
-  }, [addDebugGold, debugCheckGameState, debugResetClearState]);
+  }, [addDebugGold, debugCheckGameState, debugResetClearState, debugForceGameClear, debugAddMagicStones, debugResetMagicStones, debugCheckPrestigeState]);
 
   return {
     gameState: {

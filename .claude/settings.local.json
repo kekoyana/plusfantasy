@@ -5,7 +5,8 @@
       "Bash(npm run dev:*)",
       "Bash(pkill:*)",
       "Bash(npm run build:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx tsc --noEmit 2>&1 | head -50)"
     ],
     "deny": []
   }

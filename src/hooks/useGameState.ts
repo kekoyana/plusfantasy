@@ -1,7 +1,8 @@
-import { useCallback, useEffect } from 'react';
-import { GameState, GameLog, PlayerState, TutorialState, GameProgress, PrestigeState } from '../types/game';
+import { useCallback, useEffect, useState } from 'react';
+import { GameState, GameLog, PlayerState, TutorialState, GameProgress, PrestigeState, OfflineProgress, Multipliers } from '../types/game';
 import { initialEntities } from '../data/initial-entities';
 import { initialPrestigeUpgrades } from '../data/prestige-upgrades';
+import { initialAchievements } from '../data/initial-achievements';
 import { calculateUpgradeCost, calculateTotalGoldPerSecond, canAfford, checkUnlockCondition } from '../utils/calculations';
 import { 
   calculatePrestigePendingStones, 
@@ -12,6 +13,8 @@ import {
   checkPrestigeUnlockConditions
 } from '../utils/prestige-calculations';
 import { useLocalStorage } from './useLocalStorage';
+import { calculateOfflineProgress, shouldShowOfflineProgress } from '../utils/offline';
+import { getNewlyCompletedAchievements, applyAchievementReward, calculateTotalMultipliers } from '../utils/achievements';
 
 const initialPlayerState: PlayerState = {
   gold: 0,
@@ -21,7 +24,8 @@ const initialPlayerState: PlayerState = {
   playtime: 0,
   gameStartTime: Date.now(),
   magicStones: 0,
-  lifetimeMagicStones: 0
+  lifetimeMagicStones: 0,
+  lastPlayTime: Date.now()
 };
 
 const initialTutorialState: TutorialState = {
@@ -48,17 +52,31 @@ const initialPrestigeState: PrestigeState = {
   pendingStones: 0
 };
 
+const initialMultipliers: Multipliers = {
+  global: {
+    clickMultiplier: 1,
+    productionMultiplier: 1,
+    goldMultiplier: 1
+  },
+  permanent: []
+};
+
 const initialGameState: GameState = {
   player: initialPlayerState,
   entities: initialEntities,
   logs: [],
   tutorial: initialTutorialState,
   progress: initialGameProgress,
-  prestige: initialPrestigeState
+  prestige: initialPrestigeState,
+  achievements: initialAchievements,
+  multipliers: initialMultipliers
 };
 
 export function useGameState() {
   const [gameState, setGameState] = useLocalStorage<GameState>('incremental-fantasy-save', initialGameState);
+  const [offlineProgress, setOfflineProgress] = useState<OfflineProgress | null>(null);
+  const [showOfflineModal, setShowOfflineModal] = useState(false);
+  const [totalClicks, setTotalClicks] = useState(0);
 
   const addLog = useCallback((message: string, type: 'info' | 'success' | 'warning' = 'info') => {
     const newLog: GameLog = {
@@ -120,9 +138,35 @@ export function useGameState() {
     return { ...state, entities: updatedEntities };
   }, []);
 
+  const checkAndCompleteAchievements = useCallback((state: GameState, clicks: number) => {
+    const newlyCompleted = getNewlyCompletedAchievements(state.achievements, state, clicks);
+    
+    if (newlyCompleted.length === 0) return state;
+    
+    // Mark achievements as completed
+    const updatedAchievements = state.achievements.map(achievement => {
+      const isNewlyCompleted = newlyCompleted.some(a => a.id === achievement.id);
+      return isNewlyCompleted ? { ...achievement, isCompleted: true } : achievement;
+    });
+    
+    // Apply rewards
+    let updatedState = { ...state, achievements: updatedAchievements };
+    newlyCompleted.forEach(achievement => {
+      updatedState = applyAchievementReward(achievement, updatedState);
+      // Log achievement completion
+      setTimeout(() => {
+        addLog(`🏆 実績達成: ${achievement.name} - ${achievement.reward.description}`, 'success');
+      }, 0);
+    });
+    
+    return updatedState;
+  }, [addLog]);
+
   const clickGold = useCallback(() => {
     setGameState(prev => {
-      const goldGained = prev.player.clickPower;
+      const multipliers = calculateTotalMultipliers(prev.multipliers);
+      const goldGained = Math.floor(prev.player.clickPower * multipliers.clickMultiplier * multipliers.goldMultiplier);
+      
       const newState = {
         ...prev,
         player: {
@@ -132,9 +176,14 @@ export function useGameState() {
         }
       };
       
-      return updateUnlockedEntities(newState);
+      const unlockedState = updateUnlockedEntities(newState);
+      const achievementState = checkAndCompleteAchievements(unlockedState, totalClicks + 1);
+      
+      return achievementState;
     });
-  }, [setGameState, updateUnlockedEntities]);
+    
+    setTotalClicks(prev => prev + 1);
+  }, [setGameState, updateUnlockedEntities, checkAndCompleteAchievements, totalClicks]);
 
   const buyEntity = useCallback((entityId: string) => {
     setGameState(prev => {
@@ -153,7 +202,9 @@ export function useGameState() {
           : e
       );
 
-      const goldPerSecond = calculateTotalGoldPerSecond(updatedEntities);
+      const multipliers = calculateTotalMultipliers(prev.multipliers);
+      const baseGoldPerSecond = calculateTotalGoldPerSecond(updatedEntities);
+      const goldPerSecond = Math.floor(baseGoldPerSecond * multipliers.productionMultiplier * multipliers.goldMultiplier);
 
       const newState = {
         ...prev,
@@ -166,7 +217,8 @@ export function useGameState() {
       };
 
       const unlockedState = updateUnlockedEntities(newState);
-      const finalState = checkGameClear(unlockedState);
+      const achievementState = checkAndCompleteAchievements(unlockedState, totalClicks);
+      const finalState = checkGameClear(achievementState);
       
       // ログを新しい状態から取得
       const updatedEntity = finalState.entities.find(e => e.id === entityId);
@@ -192,7 +244,7 @@ export function useGameState() {
 
       return finalState;
     });
-  }, [setGameState, updateUnlockedEntities, addLog, checkGameClear]);
+  }, [setGameState, updateUnlockedEntities, addLog, checkGameClear, checkAndCompleteAchievements, totalClicks]);
 
   const upgradeClickPower = useCallback(() => {
     setGameState(prev => {
@@ -223,20 +275,105 @@ export function useGameState() {
       player: {
         ...prev.player,
         gold: prev.player.gold + amount,
-        totalGoldEarned: prev.player.totalGoldEarned + amount
+        totalGoldEarned: prev.player.totalGoldEarned + amount,
+        lastPlayTime: Date.now()
       }
     }));
   }, [setGameState]);
+
+  const handleOfflineProgress = useCallback(() => {
+    if (!offlineProgress) return;
+    
+    setGameState(prev => ({
+      ...prev,
+      player: {
+        ...prev.player,
+        gold: prev.player.gold + offlineProgress.offlineGoldEarned,
+        totalGoldEarned: prev.player.totalGoldEarned + offlineProgress.offlineGoldEarned,
+        lastPlayTime: Date.now()
+      }
+    }));
+    
+    if (offlineProgress.offlineGoldEarned > 0) {
+      addLog(`オフライン収益: ${offlineProgress.offlineGoldEarned}ゴールドを獲得しました！`, 'success');
+    }
+    
+    setOfflineProgress(null);
+    setShowOfflineModal(false);
+  }, [offlineProgress, setGameState, addLog]);
+
+  // Migration for existing saves
+  useEffect(() => {
+    setGameState(prev => {
+      let needsUpdate = false;
+      let newState = { ...prev };
+      
+      // Add missing achievements
+      if (!prev.achievements || prev.achievements.length === 0) {
+        newState.achievements = initialAchievements;
+        needsUpdate = true;
+      }
+      
+      // Add missing multipliers
+      if (!prev.multipliers) {
+        newState.multipliers = initialMultipliers;
+        needsUpdate = true;
+      }
+      
+      // Add missing lastPlayTime
+      if (!prev.player.lastPlayTime) {
+        newState.player = {
+          ...prev.player,
+          lastPlayTime: Date.now()
+        };
+        needsUpdate = true;
+      }
+      
+      return needsUpdate ? newState : prev;
+    });
+  }, [setGameState]);
+
+  // Check for offline progress on game load
+  useEffect(() => {
+    const currentState = gameState;
+    if (!currentState.player.lastPlayTime) return;
+
+    if (shouldShowOfflineProgress(currentState.player.lastPlayTime)) {
+      const multipliers = calculateTotalMultipliers(currentState.multipliers);
+      const effectiveGoldPerSecond = Math.floor(currentState.player.goldPerSecond * multipliers.goldMultiplier);
+      
+      const progress = calculateOfflineProgress(
+        currentState.player.lastPlayTime,
+        effectiveGoldPerSecond
+      );
+      
+      setOfflineProgress(progress);
+      setShowOfflineModal(true);
+    } else {
+      // Update lastPlayTime for short absences
+      setGameState(prev => ({
+        ...prev,
+        player: {
+          ...prev.player,
+          lastPlayTime: Date.now()
+        }
+      }));
+    }
+  }, []); // Only run once on mount
 
   const resetGame = useCallback(() => {
     const newGameState = {
       ...initialGameState,
       player: {
         ...initialPlayerState,
-        gameStartTime: Date.now() // リセット時に新しい開始時刻を設定
+        gameStartTime: Date.now(),
+        lastPlayTime: Date.now()
       }
     };
     setGameState(newGameState);
+    setOfflineProgress(null);
+    setShowOfflineModal(false);
+    setTotalClicks(0);
     addLog('ゲームをリセットしました。新しい冒険を始めましょう！', 'info');
   }, [setGameState, addLog]);
 
@@ -500,6 +637,10 @@ export function useGameState() {
     debugResetClearState,
     debugForceGameClear,
     executePrestige,
-    buyPrestigeUpgrade
+    buyPrestigeUpgrade,
+    // Offline progress
+    offlineProgress,
+    showOfflineModal,
+    handleOfflineProgress
   };
 }
